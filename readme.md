@@ -7,3 +7,4 @@
 2. npm run dev
 3. python server.py
 * 2, 3번은 새창에서 실행
+4. http://localhost:3000 접속
