@@ -1,3 +1,3 @@
 # 1.설치
-pip install -r requirements.txt
-npm install
+1. pip install -r requirements.txt
+2. npm install
