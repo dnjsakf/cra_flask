@@ -1,6 +1,6 @@
 from flask import Blueprint, request, make_response
 
-blueprint = Blueprint('/data', __name__);
+blueprint = Blueprint('/data', __name__)
 	
 @blueprint.route('')
 def getData():

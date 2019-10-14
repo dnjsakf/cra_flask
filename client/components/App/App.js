@@ -4,27 +4,52 @@ import axios from 'axios'
 
 import Counter from './../Counter/Counter';
 import Counter2 from './../Counter/Counter2';
+import Character from './../Character/Character';
 
 const App = memo(() => {
 	
-	const countRef = useRef();
-	const [ count, setCount ] = useState( 1 );
-	const reduxCount = useSelector( ( { counter } ) => ( counter.count ) );
+	const [ pos, setPos ] = useState( 0 );
+	const [ move, setMove ] = useState( 0 );
 	
-	useEffect( ()=> {
-		console.log( '[root][rendering...]', count, reduxCount );
-	}, [ count, reduxCount ] ); 
+	useEffect( () => {
+		console.log( '[pos]', pos ); 
+	}, [ pos ]);
+	useEffect( () => {
+		console.log( '[move]', move ); 
+	}, [ move ]);
+
+	const setPosition = ( nextPos )=>( e )=>{
+		e.preventDefault();
+
+		if( pos === nextPos ){
+			setMove( move >= 2 ? 0 : move + 1 );
+		} else {
+			setMove( 0 );
+			setPos( nextPos );
+		}
+	};
 	
 	return (
-		<>
-			<span>root count: {reduxCount}/{count}</span>
+		<div id="test" style={{dispaly:'block', width:'100%', height:'100%'}}>
+			<div><span>{ pos }{ move }</span></div>
 			<div>
-				<h4>redux</h4>
-				<Counter />
-				<h4>state</h4>
-				<Counter2 onCount={setCount}/>
+				<Character pos={pos} move={move} />
+				<table border='0'>
+					<tbody>
+						<tr>
+							<td></td>
+							<td><button className="ctl-btn" onClick={setPosition(0)}>W</button></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><button className="ctl-btn" onClick={setPosition(3)}>A</button></td>
+							<td><button className="ctl-btn" onClick={setPosition(2)}>S</button></td>
+							<td><button className="ctl-btn" onClick={setPosition(1)}>D</button></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
-		</>
+		</div>
 	)
 });
 
