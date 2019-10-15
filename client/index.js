@@ -15,7 +15,7 @@ function render( Component, flag=true ){
 	Component = flag ? hot( Component ) : Component;
 	ReactDOM.render( 
 		<Provider store={ store }>
-			<Component />
+			<Component user='Heo'/>
 		</Provider>
 	, document.getElementById('root') );
 }

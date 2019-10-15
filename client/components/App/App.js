@@ -1,56 +1,59 @@
-import React, { memo, useState, useEffect, useCallback, useRef } from 'react'
-import { useSelector } from 'react-redux'
-import axios from 'axios'
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Link, Switch, NavLink } from 'react-router-dom';
+import Controller from './../Controller/Controller'
 
-import Counter from './../Counter/Counter';
-import Counter2 from './../Counter/Counter2';
-import Character from './../Character/Character';
+const ACTIVE_STYLE = {
+    color: 'red'
+}
 
-const App = memo(() => {
-	
-	const [ pos, setPos ] = useState( 0 );
-	const [ move, setMove ] = useState( 0 );
-	
-	useEffect( () => {
-		console.log( '[pos]', pos ); 
-	}, [ pos ]);
-	useEffect( () => {
-		console.log( '[move]', move ); 
-	}, [ move ]);
+class App extends Component {
+    state = {
+        count: 1
+    }
 
-	const setPosition = ( nextPos )=>( e )=>{
-		e.preventDefault();
+    componentWillMount(){
+        console.log('[componentWillMount]');
+    }
+    componentDidMount(){
+        console.log('[componentDidMount]');
+    }
+    componentDidUpdate(prevState, curtState, a, b){
+        console.log('[componentDidUpdate]', prevState, curtState, a, b);
+    }
 
-		if( pos === nextPos ){
-			setMove( move >= 2 ? 0 : move + 1 );
-		} else {
-			setMove( 0 );
-			setPos( nextPos );
-		}
-	};
-	
-	return (
-		<div id="test" style={{dispaly:'block', width:'100%', height:'100%'}}>
-			<div><span>{ pos }{ move }</span></div>
-			<div>
-				<Character pos={pos} move={move} />
-				<table border='0'>
-					<tbody>
-						<tr>
-							<td></td>
-							<td><button className="ctl-btn" onClick={setPosition(0)}>W</button></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td><button className="ctl-btn" onClick={setPosition(3)}>A</button></td>
-							<td><button className="ctl-btn" onClick={setPosition(2)}>S</button></td>
-							<td><button className="ctl-btn" onClick={setPosition(1)}>D</button></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	)
-});
+    shouldComponentUpdate(prevProps, prevState){
+        console.log('[shouldComponentUpdate]', prevProps, prevState);
+        return true;
+    }
 
-export default App
+    componentWillUnmount(){
+        console.log('[componentWillUnmount]');
+    }
+
+    onClick = (e)=>{
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+
+    render(){
+        return (
+            <BrowserRouter>
+                <span>{this.state.count}</span><button onClick={this.onClick}></button>
+                <Link to="/">Home</Link>
+                <ul>
+                    <li><NavLink exact to="/" activeStyle={ ACTIVE_STYLE }>Home</NavLink></li>
+                    <li><NavLink exact to="/controller" activeStyle={ ACTIVE_STYLE }>controller</NavLink></li>
+                </ul>
+                <div>
+                    <Switch>
+                        <Route exact path="/controller" render={(props)=><Controller {...props}/>}/>
+                        <Route exact path="/controller/:charType" render={(props)=><Controller {...props}/>}/>
+                    </Switch>
+                </div>
+            </BrowserRouter>
+        )
+    }
+};
+
+export default App;
