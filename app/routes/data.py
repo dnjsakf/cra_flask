@@ -12,32 +12,61 @@ def getData():
 	return resp
 
 @blueprint.route('/list', methods= [ 'GET' ])	
-@blueprint.route('/list/<int:page>', methods= [ 'GET' ])
-def getList(page):
-	data = jsonify({
-		"list": [
-			{
-				"no": 1
-				, "title": "hi"
-				, "article": "hello, World!!!"
-				, "cdate": "2019-10-16"
-			},
-			{
-				"no": 2
-				, "title": "hi"
-				, "article": "hello, World!!!"
-				, "cdate": "2019-10-16"
-			},
-			{
-				"no": 3
-				, "title": "hi"
-				, "article": "hello, World!!!"
-				, "cdate": "2019-10-16"
-			}		
-		]
-	})
-	resp = make_response(data)
-	resp.headers.set("Access-Control-Allow-Origin", "*")
-	#resp.headers.set("content-type", "json")
+def getList():
+
+	page = int(request.args.get('page'))
+	rowsPerPage = int(request.args.get('rowsPerPage'))
+
+
+	start = ( page * rowsPerPage )
+	end = ( start + rowsPerPage )
+
+	data = {
+		"list": articleList[start:end]
+		, 'maxLength': len(articleList) 
+	}
+
+	# resp.headers.set("Access-Control-Allow-Origin", "*")
+	# resp.headers.set("content-type", "json")
 	
-	return resp
+	return jsonify(data)
+
+
+articleList = [
+	{
+		"no": 1
+		, "title": "hi"
+		, "article": "hello, World!!!"
+		, "cdate": "2019-10-16"
+	},
+	{
+		"no": 2
+		, "title": "hi"
+		, "article": "hello, World!!!"
+		, "cdate": "2019-10-16"
+	},
+	{
+		"no": 3
+		, "title": "hi"
+		, "article": "hello, World!!!"
+		, "cdate": "2019-10-16"
+	},
+	{
+		"no": 4
+		, "title": "hi"
+		, "article": "hello, World!!!"
+		, "cdate": "2019-10-16"
+	}	,
+	{
+		"no": 5
+		, "title": "hi"
+		, "article": "hello, World!!!"
+		, "cdate": "2019-10-16"
+	}	,
+	{
+		"no": 6
+		, "title": "hi"
+		, "article": "hello, World!!!"
+		, "cdate": "2019-10-16"
+	}	
+]
