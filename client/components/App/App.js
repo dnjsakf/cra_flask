@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link, Switch, NavLink } from 'react-router-dom';
 import Controller from './../Controller/Controller'
+import Container from './../List/Container'
 
 const ACTIVE_STYLE = {
     color: 'red'
@@ -43,12 +44,15 @@ class App extends Component {
                 <Link to="/">Home</Link>
                 <ul>
                     <li><NavLink exact to="/" activeStyle={ ACTIVE_STYLE }>Home</NavLink></li>
+					<li><NavLink exact to="/list" activeStyle={ ACTIVE_STYLE }>List</NavLink></li>
                     <li><NavLink exact to="/controller" activeStyle={ ACTIVE_STYLE }>controller</NavLink></li>
                 </ul>
                 <div>
                     <Switch>
                         <Route exact path="/controller" render={(props)=><Controller {...props}/>}/>
                         <Route exact path="/controller/:charType" render={(props)=><Controller {...props}/>}/>
+						<Route path="/list" render={()=><Container page='1'/>}/>
+						//<Route exact path="/list/:page" render={()=><Container page='1'/>}/>
                     </Switch>
                 </div>
             </BrowserRouter>

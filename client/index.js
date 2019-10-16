@@ -20,8 +20,4 @@ function render( Component, flag=true ){
 	, document.getElementById('root') );
 }
 
-
-	
-	
-
 render( App );
