@@ -11,5 +11,12 @@ def createApp(env='dev'):
 	# Flask Config
 	pyConf = os.path.join(os.path.dirname(__file__),'config', f'config-{env}.py')
 	app.config.from_pyfile( pyConf )
-	
+
+	if 'CORS' in app.config:
+		from flask_cors import CORS
+
+		cors = CORS(app, resources=app.config['CORS'])
+
+		print( 'set CORS' )
+
 	return app

@@ -1,5 +1,6 @@
 import React, { memo, useState, useCallback, useEffect } from 'react'
-import Link from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { onSelect } from './../../reducers/content'
 
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
@@ -9,14 +10,17 @@ import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import TablePagination from '@material-ui/core/TablePagination'
 
-import axios from 'axios'
-
 const Container = memo(( { initPage, initRowsPerPage } )=>{
+	const list = useSelector(( state )=>( state.content.list ), []);
+	const maxLength = useSelector(( state )=>( state.content.maxLength ), []);
 
-	const [ list, setList ] = useState( [] );
 	const [ page, setPage ] = useState( initPage );
 	const [ rowsPerPage, setRowsPerPage ] = useState( initRowsPerPage );
-	const [ maxLength, setMaxLength ] = useState( 0 )
+
+	const dispatch = useDispatch();
+	const getList = useCallback(( reqOption )=>{
+		dispatch( onSelect( reqOption ) );
+	}, [ dispatch ]);
 
 	const columns = [
 		{ 'id': 'no', 'name': 'no', 'label': '번호', 'link': (linkPage)=>( '/list/'+linkPage ), 'handler': null },
@@ -43,13 +47,13 @@ const Container = memo(( { initPage, initRowsPerPage } )=>{
 	
 	// For List
 	useEffect(()=>{
-		console.log('[loaded_data]', list);		
+		console.log('[loaded_data]', list);
 	}, [ list ]);
 
 	// For Page
 	useEffect(()=>{
 		console.log( '[loadding...]' );
-		requestData({
+		getList({
 			method: 'get'
 			, url: 'http://localhost:3000/data/list'
 			, params: {
@@ -57,19 +61,7 @@ const Container = memo(( { initPage, initRowsPerPage } )=>{
 				, 'rowsPerPage': rowsPerPage
 			} 
 		});
-
 	}, [ page ]);
-
-	// Module로 빼기
-	const requestData = (reqOption)=>{
-		axios(reqOption)
-			.then( (res)=>{
-				setList( res.data.list );
-				setMaxLength( res.data.maxLength );
-			}).catch( (err)=>{
-				console.error( err );
-			});
-	}
 	
 	return (
 		<>

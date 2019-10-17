@@ -1,15 +1,10 @@
 import os
 from flask import Flask, render_template, url_for
-from flask_cors import CORS
 
 from app.routes.data import blueprint as DataRoute
 
-app = Flask(__name__, root_path='', static_url_path="/dist/static", static_folder='static', template_folder='app/templates')
+app = Flask(__name__, root_path='', static_url_path="/dist/static", static_folder='./client/static', template_folder='app/templates')
 app.register_blueprint(DataRoute, url_prefix='/data')
-
-cors = CORS(app, resources={
-	r'/*': { 'origin': '*' }
-})
 
 @app.route('/')
 def index():

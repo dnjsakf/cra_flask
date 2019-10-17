@@ -5,11 +5,16 @@ import { hot } from 'react-hot-loader/root'
 import App from './components/App/App'
 
 // Config Redux
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers'
 
-const store = createStore( rootReducer );
+// Config ReduxSaga
+import createSagaMiddleware from 'redux-saga'
+import rootSagas from './sagas'
+
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore( rootReducer, applyMiddleware(sagaMiddleware) );
 
 function render( Component, flag=true ){
 	Component = flag ? hot( Component ) : Component;
@@ -20,4 +25,5 @@ function render( Component, flag=true ){
 	, document.getElementById('root') );
 }
 
+sagaMiddleware.run(rootSagas);
 render( App );
