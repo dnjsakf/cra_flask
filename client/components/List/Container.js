@@ -40,7 +40,7 @@ const useStyles = makeStyles( ( theme )=>({
 	}
 }));
 
-const Container = ( )=>{
+const Container = ( props )=>{
 	const classes = useStyles();
 	const [ tabId, setTabId ] = useState( 0 );
 

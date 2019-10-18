@@ -1,5 +1,10 @@
 from flask import Blueprint, request, make_response, jsonify
 
+import os
+import codecs
+import json
+contentList = json.load( codecs.open(os.path.join(os.path.dirname(__file__),'../data/dump.json'), 'r') )
+
 blueprint = Blueprint('/data', __name__)
 	
 @blueprint.route('')
@@ -11,62 +16,20 @@ def getData():
 
 	return resp
 
-@blueprint.route('/list', methods= [ 'GET' ])	
-def getList():
+@blueprint.route('/list', methods= [ 'GET' ])
+@blueprint.route('/list/<int:page>', methods= [ 'GET' ])
+def getList( page ):
 
-	page = int(request.args.get('page'))
-	rowsPerPage = int(request.args.get('rowsPerPage'))
-
+	page = page if page else 0
+	rowsPerPage = int(request.args.get('rowsPerPage') if 'rowsPerPage' in request.args else 0 )
 
 	start = ( page * rowsPerPage )
 	end = ( start + rowsPerPage )
 
 	data = {
-		"list": articleList[start:end]
-		, 'maxLength': len(articleList) 
+		"list": contentList[start:end]
+		, 'maxLength': len(contentList) 
 	}
-
-	# resp.headers.set("Access-Control-Allow-Origin", "*")
-	# resp.headers.set("content-type", "json")
 	
 	return jsonify(data)
-
-
-articleList = [
-	{
-		"no": 1
-		, "title": "hi"
-		, "article": "hello, World!!!"
-		, "cdate": "2019-10-16"
-	},
-	{
-		"no": 2
-		, "title": "hi"
-		, "article": "hello, World!!!"
-		, "cdate": "2019-10-16"
-	},
-	{
-		"no": 3
-		, "title": "hi"
-		, "article": "hello, World!!!"
-		, "cdate": "2019-10-16"
-	},
-	{
-		"no": 4
-		, "title": "hi"
-		, "article": "hello, World!!!"
-		, "cdate": "2019-10-16"
-	}	,
-	{
-		"no": 5
-		, "title": "hi"
-		, "article": "hello, World!!!"
-		, "cdate": "2019-10-16"
-	}	,
-	{
-		"no": 6
-		, "title": "hi"
-		, "article": "hello, World!!!"
-		, "cdate": "2019-10-16"
-	}	
-]
+	

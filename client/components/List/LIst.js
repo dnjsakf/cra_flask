@@ -43,11 +43,6 @@ const List = memo(( { initPage, initRowsPerPage } )=>{
 		setRowsPerPage( +e.target.value )
 	}, [ rowsPerPage ]);
 
-	// For RowsPerPage
-	useEffect(()=>{
-		console.log('[rowsPerPage]',rowsPerPage );
-	}, [ rowsPerPage ]);
-	
 	// For Status
 	useEffect(()=>{
 		console.log('[loaded status]', status);
@@ -58,13 +53,12 @@ const List = memo(( { initPage, initRowsPerPage } )=>{
 		console.log( '[loadding...]' );
 		getList({
 			method: 'get'
-			, url: 'http://localhost:3000/data/list'
+			, url: 'http://localhost:3000/data/list/'+page
 			, params: {
-				'page': page
-				, 'rowsPerPage': rowsPerPage
+				'rowsPerPage': rowsPerPage
 			} 
 		});
-	}, [ page ]);
+	}, [ page, rowsPerPage ]);
 	
 	return (
 		<Paper>
@@ -76,9 +70,7 @@ const List = memo(( { initPage, initRowsPerPage } )=>{
 				</TableHead>
 				<TableBody>
 				{
-					status === 0 
-					? <TableRow><TableCell><span>Loadding...</span></TableCell></TableRow>	// HOC로 구현하기
-					: list.map(( data, row )=>(
+					list.map(( data, row )=>(
 						<TableRow key={ data.no }>
 						{
 							columns.map((col)=>(
