@@ -3,7 +3,7 @@ from flask import Blueprint, request, make_response, jsonify
 import os
 import codecs
 import json
-contentList = json.load( codecs.open(os.path.join(os.path.dirname(__file__),'../data/dump.json'), 'r') )
+contentList = json.load( codecs.open(os.path.join(os.path.dirname(__file__),'../data/dump.json'), 'r') )[0:42]
 
 blueprint = Blueprint('/data', __name__)
 	
@@ -20,10 +20,10 @@ def getData():
 @blueprint.route('/list/<int:page>', methods= [ 'GET' ])
 def getList( page ):
 
-	page = page if page else 0
+	page = page if page else 1
 	rowsPerPage = int(request.args.get('rowsPerPage') if 'rowsPerPage' in request.args else 0 )
 
-	start = ( page * rowsPerPage )
+	start = ( ( page - 1 ) * rowsPerPage )
 	end = ( start + rowsPerPage )
 
 	data = {

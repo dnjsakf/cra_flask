@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useCallback, useEffect, memo } from 'react'
+import { withRouter } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -40,7 +40,7 @@ const useStyles = makeStyles( ( theme )=>({
 	}
 }));
 
-const Container = ( props )=>{
+const Container = memo(({ history })=>{
 	const classes = useStyles();
 	const [ tabId, setTabId ] = useState( 0 );
 
@@ -62,7 +62,7 @@ const Container = ( props )=>{
 				</Tabs>
 			</AppBar>
 			<TabPanel value={ tabId } index={ 0 }>
-				<List initPage={ 0 } initRowsPerPage={ 5 } />
+				<List initPage={ 1 } initRowsPerPage={ 5 } />
 			</TabPanel>
 			<TabPanel value={ tabId } index={ 1 }>
 				Board
@@ -72,6 +72,6 @@ const Container = ( props )=>{
 			</TabPanel>
 		</div>	
 	)
-}
+});
 
-export default Container;
+export default withRouter(Container);

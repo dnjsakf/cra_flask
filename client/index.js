@@ -16,7 +16,7 @@ import rootSagas from './sagas'
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore( rootReducer, applyMiddleware(sagaMiddleware) );
 
-function render( Component, flag=true ){
+function render( Component, flag=false ){
 	Component = flag ? hot( Component ) : Component;
 	ReactDOM.render( 
 		<Provider store={ store }>
@@ -26,4 +26,4 @@ function render( Component, flag=true ){
 }
 
 sagaMiddleware.run(rootSagas);
-render( App );
+render( App, true );

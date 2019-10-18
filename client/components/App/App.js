@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Link, Switch, NavLink } from 'react-router-dom';
+import { BrowserRouter, Route, Link, Switch, NavLink, withRouter } from 'react-router-dom';
 import Controller from './../Controller/Controller'
 import Container from './../List/Container'
 
@@ -53,8 +53,8 @@ class App extends Component {
                         <Route exact path="/controller" render={(props)=><Controller {...props}/>}/>
                         <Route exact path="/controller/:charType" render={(props)=><Controller {...props}/>}/>
 						
-                        <Route path="/list/:page" render={( props )=><Container {...props}/>} />
 						<Route path="/list" render={( props )=><Container {...props}/>} />
+                        <Route path="/list/:page" render={( props )=><Container {...props}/> }/>
                     </Switch>
                 </div>
             </BrowserRouter>
