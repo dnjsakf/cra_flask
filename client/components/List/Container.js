@@ -1,111 +1,77 @@
-import React, { memo, useState, useCallback, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { onSelect } from './../../reducers/content'
+import React, { useState, useCallback, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableBody from '@material-ui/core/TableBody'
-import TableFooter from '@material-ui/core/TableFooter'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
-import TablePagination from '@material-ui/core/TablePagination'
+import { makeStyles } from '@material-ui/core/styles';
 
-const Container = memo(( { initPage, initRowsPerPage } )=>{
-	const list = useSelector(( state )=>( state.content.list ), []);
-	const maxLength = useSelector(( state )=>( state.content.maxLength ), []);
+import AppBar from '@material-ui/core/AppBar'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
-	const [ page, setPage ] = useState( initPage );
-	const [ rowsPerPage, setRowsPerPage ] = useState( initRowsPerPage );
+import List from './List'
 
-	const dispatch = useDispatch();
-	const getList = useCallback(( reqOption )=>{
-		dispatch( onSelect( reqOption ) );
-	}, [ dispatch ]);
+function TabPanel({ children, value, index, ...other }) {
+  return (
+    <Typography
+		component="div"
+		role="tabpanel"
+		hidden={value !== index}
+		id={`simple-tabpanel-${ index }`}
+		aria-labelledby={`simple-tab-${ index }`}
+		{...other}
+    >
+		<Box p={1}>{children}</Box>
+    </Typography>
+  );
+}
 
-	const columns = [
-		{ 'id': 'no', 'name': 'no', 'label': '번호', 'link': (linkPage)=>( '/list/'+linkPage ), 'handler': null },
-		{ 'id': 'title', 'name': 'title', 'label': '제목', 'link': null, 'handler': null },
-		{ 'id': 'article', 'name': 'article', 'label': '내용', 'link': null, 'handler': null }
-	];
+function setProps( tabId ) {
+  return {
+    id: `simple-tab-${ tabId }`,
+    'aria-controls': `simple-tabpanel-${ tabId }`,
+  };
+}
 
-	const handleChangePage = useCallback(( e, nextPage )=>{
-		e.preventDefault();
+const useStyles = makeStyles( ( theme )=>({
+	tabMenu: {
+		flexGrow: 1,
+		backgroundColor: theme.palette.background.paper,
+	}
+}));
 
-		setPage(nextPage);
-	}, [ page ]);
+const Container = ( )=>{
+	const classes = useStyles();
+	const [ tabId, setTabId ] = useState( 0 );
 
-	const handleChangeRowsPerPage = useCallback(( e )=>{
-		e.preventDefault();
-
-		setRowsPerPage( +e.target.value )
-	}, [ rowsPerPage ]);
-
-	// For RowsPerPage
-	useEffect(()=>{
-		console.log('[rowsPerPage]',rowsPerPage );
-	}, [ rowsPerPage ]);
+	const handleSelectTab = useCallback( ( e, nextTab )=>{
+		setTabId( nextTab );
+	}, []);
 	
-	// For List
 	useEffect(()=>{
-		console.log('[loaded_data]', list);
-	}, [ list ]);
-
-	// For Page
-	useEffect(()=>{
-		console.log( '[loadding...]' );
-		getList({
-			method: 'get'
-			, url: 'http://localhost:3000/data/list'
-			, params: {
-				'page': page
-				, 'rowsPerPage': rowsPerPage
-			} 
-		});
-	}, [ page ]);
+		console.log( '[change tab]', tabId );
+	},[ tabId ]);
 	
 	return (
-		<>
-			<Table>
-				<TableHead>
-					<TableRow>
-					{ columns.map(( col )=>(<TableCell key={col.id}>{col.label}</TableCell>)) }
-					</TableRow>
-				</TableHead>
-				<TableBody>
-				{ 
-					list.map(( data, row )=>(
-						<TableRow key={ data.no }>
-						{
-							columns.map((col)=>(
-								<TableCell key={col.id+String(row)}>
-									<span>{data[col.id]}</span>
-								</TableCell>
-							))
-						}
-						</TableRow>
-					))
-				}
-				</TableBody>
-				<TableFooter>
-				</TableFooter>
-			</Table>
-			<TablePagination
-				rowsPerPageOptions={[5, 10, 25]}
-				component="div"
-				count={maxLength}
-				rowsPerPage={rowsPerPage}
-				page={page}
-				backIconButtonProps={{
-					'aria-label': 'previous page',
-				}}
-				nextIconButtonProps={{
-					'aria-label': 'next page',
-				}}
-				onChangePage={handleChangePage}
-				onChangeRowsPerPage={handleChangeRowsPerPage}
-				/>
-		</>
+		<div className={classes.tabMenu}>
+			<AppBar position="static">
+				<Tabs value={ tabId } onChange={ handleSelectTab }>
+					<Tab label="Article" {...setProps( 0 )} />
+					<Tab label="Board" {...setProps( 1 )} />
+					<Tab label="Notice" {...setProps( 2 )} />
+				</Tabs>
+			</AppBar>
+			<TabPanel value={ tabId } index={ 0 }>
+				<List initPage={ 0 } initRowsPerPage={ 5 } />
+			</TabPanel>
+			<TabPanel value={ tabId } index={ 1 }>
+				Board
+			</TabPanel>
+			<TabPanel value={ tabId } index={ 2 }>
+				Notice
+			</TabPanel>
+		</div>	
 	)
-});
+}
 
 export default Container;

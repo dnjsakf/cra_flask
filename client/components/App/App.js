@@ -51,8 +51,8 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/controller" render={(props)=><Controller {...props}/>}/>
                         <Route exact path="/controller/:charType" render={(props)=><Controller {...props}/>}/>
-                        <Route path="/list" render={()=><Container initPage={0} initRowsPerPage={5} />}/>
-						<Route exact path="/list/:page" render={()=><Container initPage={0} initRowsPerPage={5}/>}/>
+                        <Route path="/list" render={()=><Container />}/>
+						<Route exact path="/list/:page" render={()=><List initPage={0} initRowsPerPage={5}/>}/>
                     </Switch>
                 </div>
             </BrowserRouter>

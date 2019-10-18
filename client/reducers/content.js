@@ -19,9 +19,8 @@ const content = ( state = initState, action )=>{
         case SELECT:
             return {
                 ...state
-                , status: 1
-                , list: []
-                , maxLength: 0
+                , res: null
+				, status: 1
             }
         case SELECT_SUCCESS:
             return {
