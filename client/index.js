@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom'
 import { hot } from 'react-hot-loader/root'
 import App from './components/App/App'
 
+import './common.css'
+
 // Config Redux
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'

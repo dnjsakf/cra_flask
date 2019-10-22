@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   name: 'cra_flask',
@@ -50,8 +51,20 @@ module.exports = {
           limit: 10000,
           name: '/static/[name].[ext]',
         },
+      },
+      {
+        test: [/\.css$/],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       }
     ],
+  },
+  plugins:[
+    new MiniCssExtractPlugin({ filename: 'app.css' })
+  ],
+  resolve: {
+    alias: {
+      Components: path.resolve( __dirname, 'client/components')
+    }
   },
   devServer: {
     host: 'localhost',

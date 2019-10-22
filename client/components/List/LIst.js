@@ -14,7 +14,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TablePagination from '@material-ui/core/TablePagination'
 import Button from '@material-ui/core/Button'
 
-import { Link } from 'react-router-dom'
+import { ItemHeader, ItemWrapper, NumPaigination } from './Item'
 
 const useStyles = makeStyles(( theme )=>({
 	buttonWrraper: {
@@ -22,42 +22,6 @@ const useStyles = makeStyles(( theme )=>({
 		, backgroundColor: theme.palette.background.paper,
 	}
 }));
-
-const Item = memo(( { link, text } )=>{
-	return (
-		<TableCell>
-		{
-			link
-				? ( <Button><Link to={{ pathname: link }}>{ text }</Link></Button> )
-				: ( <span>{ text }</span> )
-		}
-		</TableCell>
-	);
-});
-
-const ItemWrapper = memo(({ columns, data  })=>{
-	return (
-		<TableRow>
-		{ columns.map(( col )=>( <Item key={ 'col-'+col.id+data } link={ col.link && col.link( data.no ) } text={ data[col.id] }/> )) }
-		</TableRow>
-	);
-});
-
-const NumPaigination = memo(( props )=>{
-	const { page, rowsPerPage, maxLength } = useSelector(({ content })=>( content ), [ ]);
-
-	const pages = parseInt( maxLength / rowsPerPage ) + ( maxLength % rowsPerPage > 0 ? 1 : 0 );
-	const startPageNum = (parseInt( pages / rowsPerPage ) * rowsPerPage)+1;
-	const endPageNum = startPageNum + rowsPerPage - 1;
-
-	console.log( startPageNum, page, endPageNum );
-
-	return (
-		Array( pages ).fill( startPageNum ).map(( el, idx )=>(
-			<a key={idx}>{ el + idx }</a>
-		))
-	)
-});
 
 const List = memo(( { initPage, initRowsPerPage, history } )=>{
 
@@ -113,15 +77,17 @@ const List = memo(( { initPage, initRowsPerPage, history } )=>{
 		<Paper>
 			<Table>
 				<TableHead>
-					<TableRow>
-					{ columns.map(( col )=>(<TableCell key={ col.id }>{col.label}</TableCell>)) }
-					</TableRow>
+					<ItemWrapper columns={ columns } isHeader={ true }/>
 				</TableHead>
 				<TableBody>
-					{ list.map(( data )=>( <ItemWrapper key={ 'row-'+data.no } columns={ columns } data={ data } /> )) }
+				{ 
+					list.map(( data )=>( 
+						<ItemWrapper key={ 'row-'+data.no } columns={ columns } data={ data } /> 
+					))
+				}
 				</TableBody>
 				<TableFooter>
-					<TableRow >
+					<TableRow>
 						<TableCell colSpan='3' padding='none' align='right'>
 							<Button>Insert</Button>
 							<NumPaigination />
